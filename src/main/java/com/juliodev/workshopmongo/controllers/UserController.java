@@ -42,11 +42,16 @@ public class UserController {
 	public ResponseEntity<Void> insert(@RequestBody UserDTO objDTO){
 		User obj = userService.fromDTO(objDTO);
 		obj = userService.insert(obj);
-		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(
 				obj.getId()).toUri();
 		
 		return ResponseEntity.created(uri).build();
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable String id){
+		userService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }
