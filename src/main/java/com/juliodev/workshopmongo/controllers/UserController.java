@@ -24,6 +24,16 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@RequestMapping(method=RequestMethod.POST)
+	public ResponseEntity<Void> insert(@RequestBody UserDTO objDTO){
+		User obj = userService.fromDTO(objDTO);
+		obj = userService.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(
+				obj.getId()).toUri();
+		
+		return ResponseEntity.created(uri).build();
+	}
+	
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<UserDTO>> findAll(){
 		List<User> list = userService.findAll();
@@ -37,15 +47,13 @@ public class UserController {
 		User obj = userService.findbyID(id);
 		return ResponseEntity.ok().body(new UserDTO(obj));
 	}
-	
-	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody UserDTO objDTO){
+
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody UserDTO objDTO, @PathVariable String id){
 		User obj = userService.fromDTO(objDTO);
-		obj = userService.insert(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(
-				obj.getId()).toUri();
-		
-		return ResponseEntity.created(uri).build();
+		obj.setId(id);
+		obj = userService.update(obj);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
