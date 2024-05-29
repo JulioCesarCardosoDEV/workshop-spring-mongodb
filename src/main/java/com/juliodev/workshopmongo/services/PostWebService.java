@@ -21,5 +21,7 @@ public class PostWebService {
 		return post.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
 	}
 	
-	
+	public List<PostWeb> findByTitle(String text){
+		return postWebRepository.findByTitleContainingIgnoreCase(text);
+	}
 }
