@@ -1,5 +1,6 @@
 package com.juliodev.workshopmongo.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,5 +24,10 @@ public class PostWebService {
 	
 	public List<PostWeb> findByTitle(String text){
 		return postWebRepository.searchTitle(text);
+	}
+	
+	public List<PostWeb> fullSearch(String text, Date minDate, Date maxDate){
+		maxDate = new Date(maxDate.getTime() + 24 * 60 * 60 * 1000);
+		return postWebRepository.fullSearch(text, minDate, maxDate);
 	}
 }
